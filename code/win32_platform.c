@@ -1,4 +1,3 @@
-#include <windows.h>
 // PERSONAL NOTE:
 // 1. Compiling the code
 //  to build program, run:
@@ -18,12 +17,29 @@
 //  Day 088 (push buffer rendering)
 //  Day 112–113 (CPU model + perf counters)
 //  Day 132 (asset streaming starts)
+// 
+// 4. For the windows platform layer code (win32_platform.c)
+//  it will heavily comment the code to indicate which MSDN Doc is used since it's 
+//  highly linked with interacting with windows, which needs specific functions/classes, etc.
+
+#include <windows.h>
 
 /*
 void main(){
     printf("hello sailor!\n");
 }
 */
+
+typedef int b32;
+
+#define true 1
+#define true 0
+
+#define global_variable static
+#define internal static
+
+global_variable b32 running = true;
+
 
 WNDPROC Wndproc;
 
@@ -49,4 +65,15 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
 
     HWND window = CreateWindowExA(0, window_class.lpszClassName, "Breakout",
         WS_VISIBLE|WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 1280, 720, 0, 0, 0, 0);
+
+
+    while (running){
+        // INPUT
+        MSG message;
+
+        // MSDN PeekMessageA https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-peekmessagea
+        while(PeekMessageA(&message, window, 0, 0, PM_REMOVE)){ 
+
+        }
+    }
 }
