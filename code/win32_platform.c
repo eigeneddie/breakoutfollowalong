@@ -1,8 +1,15 @@
 #include <windows.h>
-// NOTE: 
-// to build program, run  call "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvarsall.bat" x64 
-// on the cmd prompt so you can build the code from using cl command
-// test
+// PERSONAL NOTE:
+// 1. Compiling the code
+//  to build program, run:
+//  call "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvarsall.bat" x64 
+//  on the cmd prompt so you can build the code from using cl command
+//  
+// 2. OG Handmadehero notes
+//  here's external resource indexint handmadehero episodes.
+//  Use to pin down philosophy + core engine architecture patterns
+
+//  https://yakvi.github.io/handmade-hero-notes/
 
 /*
 void main(){
@@ -10,27 +17,32 @@ void main(){
 }
 */
 
-int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
+
+WNDPROC Wndproc;
+
+LRESULT window_callback(HWND window, UINT message, WPARAM w_param, 
+    LPARAM l_param)
 {
+    return DefWindowProcA(window, message, w_param, l_param);
+}
+
+
+int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
+{
+    //printf("hello sailor!\n");
+    
 
     WNDCLASSA window_class = {0};
     window_class.style = CS_HREDRAW|CS_VREDRAW;
-    window_class.lpClassName = "Game_window_class";
-    WNDPROC   lpfnWndProc;
-    int       cbClsExtra;
-    int       cbWndExtra;
-    HINSTANCE hInstance;
-    HICON     hIcon;
-    HCURSOR   hCursor;
-    HBRUSH    hbrBackground;
-    LPCSTR    lpszMenuName;
-    LPCSTR    lpszClassName;
+    window_class.lpfnWndProc = window_callback;
 
-    RegisterClassA(
-        const WNDCLASSA *lpWndClass
-        );
+    window_class.lpszClassName = "Game_window_class";
 
-    HWND window = CreateWindowExA(
+    RegisterClassA(&window_callback);
+
+    HWND window = CreateWindowExA(0, window_class.lpszClassName, "Breakout",
+        WS_VISIBLE|
+
         DWORD     dwExStyle,
         LPCSTR    lpClassName,
         LPCSTR    lpWindowName,
@@ -44,4 +56,6 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmd
         HINSTANCE hInstance,
         LPVOID    lpParam
         );
+    
+    */
 }
