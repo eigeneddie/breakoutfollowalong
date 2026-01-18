@@ -25,6 +25,7 @@
 #include <windows.h>
 
 /*
+// Test code
 void main(){
     printf("hello sailor!\n");
 }
@@ -33,7 +34,7 @@ void main(){
 typedef int b32;
 
 #define true 1
-#define true 0
+#define false 0
 
 #define global_variable static
 #define internal static
@@ -43,10 +44,23 @@ global_variable b32 running = true;
 
 WNDPROC Wndproc;
 
-LRESULT window_callback(HWND window, UINT message, WPARAM w_param, 
+internal LRESULT 
+window_callback(HWND window, UINT message, WPARAM w_param, 
     LPARAM l_param)
 {
-    return DefWindowProcA(window, message, w_param, l_param);
+    LRESULT result = 0;
+    switch(message){
+        case WM_CLOSE:
+        case WM_DESTROY: {
+            running = false;
+        } break;
+
+        default:{
+            result = DefWindowProcA(window, message, w_param, l_param);
+        }
+    }
+    return result;
+
 }
 
 
@@ -58,8 +72,7 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
     WNDCLASSA window_class = {0};
     window_class.style = CS_HREDRAW|CS_VREDRAW;
     window_class.lpfnWndProc = window_callback;
-
-    window_class.lpszClassName = "Game_window_class";
+    window_class.lpszClassName = "Game_Window_Class";
 
     RegisterClassA(&window_class);
 
@@ -73,7 +86,8 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
 
         // MSDN PeekMessageA https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-peekmessagea
         while(PeekMessageA(&message, window, 0, 0, PM_REMOVE)){ 
-
+            TranslateMessage(&message);
+            DispatchMessage(&message);
         }
     }
 }
