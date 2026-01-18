@@ -22,29 +22,30 @@
 //  it will heavily comment the code to indicate which MSDN Doc is used since it's 
 //  highly linked with interacting with windows, which needs specific functions/classes, etc.
 
-#include <windows.h>
-
 /*
 // Test code
 void main(){
     printf("hello sailor!\n");
 }
 */
+#include "utils.c"
+#include <windows.h>
 
-typedef int b32;
+struct {
+    int width, height;
+    u32 *pixels;
+    BITMAPINFO bitmap_info;
+} typedef Render_Buffer;
 
-#define true 1
-#define false 0
-
-#define global_variable static
-#define internal static
-
-global_variable b32 running = true;
-
+Render_Buffer render_buffer;
 
 WNDPROC Wndproc;
 
-internal LRESULT 
+// MSDN WNDPROC https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-callwindowproca
+// Windows procedure: Callback function Windows call to deliver messages to the window
+// This is a function pointer I give to Windows for IT to use it when something happen to a window in Win32.
+// This is callback that is given to window_class.
+internal LRESULT  
 window_callback(HWND window, UINT message, WPARAM w_param, 
     LPARAM l_param)
 {
@@ -63,13 +64,11 @@ window_callback(HWND window, UINT message, WPARAM w_param,
 
 }
 
-
+// WINDOWS ENTRY POINT (the void main() for windows)
 int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
 {
-    //printf("hello sailor!\n");
-    
-
-    WNDCLASSA window_class = {0};
+    // Define the window_class
+    WNDCLASSA window_class = {0}; 
     window_class.style = CS_HREDRAW|CS_VREDRAW;
     window_class.lpfnWndProc = window_callback;
     window_class.lpszClassName = "Game_Window_Class";
@@ -78,10 +77,10 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
 
     HWND window = CreateWindowExA(0, window_class.lpszClassName, "Breakout",
         WS_VISIBLE|WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 1280, 720, 0, 0, 0, 0);
-
+    HDC hdc = GetDC(window);
 
     while (running){
-        // INPUT
+        // PART 1: INPUT
         MSG message;
 
         // MSDN PeekMessageA https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-peekmessagea
@@ -89,5 +88,34 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
             TranslateMessage(&message);
             DispatchMessage(&message);
         }
+
+        // PART 2: SIMULATION
+
+
+        // PART 3: RENDER
+
+        // NOTES:
+        // Buffer (memory) -> draw to (up to the game)
+        // use the buffer (draw) -> StretchDIBits   
+
+        // MSDN StretchDIBits https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-stretchdibits
+        StretchDIBits(hdc, 0, 0, render_buffer.width, render_buffer.height, 
+            0, 0, render_buffer.width, render_buffer.height, render_buffer.pixels, &render_buffer.bitmap_info, DIB_RGB_COLORS, SRCCOPY);
+        /*
+            HDC              hdc, // handle to device context
+            int              xDest,
+            int              yDest,
+            int              DestWidth,
+            int              DestHeight,
+            int              xSrc,
+            int              ySrc,
+            int              SrcWidth,
+            int              SrcHeight,
+            const VOID       *lpBits,
+            const BITMAPINFO *lpbmi,
+            UINT             iUsage,
+            DWORD            rop
+        */
+
     }
 }
