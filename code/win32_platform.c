@@ -38,7 +38,7 @@ struct {
     BITMAPINFO bitmap_info;
 } typedef Render_Buffer;
 
-Render_Buffer render_buffer;
+global_variable Render_Buffer render_buffer;
 
 WNDPROC Wndproc;
 
@@ -79,20 +79,14 @@ window_callback(HWND window, UINT message, WPARAM w_param, LPARAM l_param)
             // 3. Fill bitmap info
 
             // MSDN bitmapinfoheader https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapinfoheader
-            typedef struct tagBITMAPINFOHEADER {
-            DWORD biSize;
-            LONG  biWidth;
-            LONG  biHeight;
-            WORD  biPlanes;
-            WORD  biBitCount;
-            DWORD biCompression;
-            DWORD biSizeImage;
-            LONG  biXPelsPerMeter;
-            LONG  biYPelsPerMeter;
-            DWORD biClrUsed;
-            DWORD biClrImportant;
-            } BITMAPINFOHEADER, *LPBITMAPINFOHEADER, *PBITMAPINFOHEADER;
-        }
+            render_buffer.bitmap_info.bmiHeader.biSize = sizeof(render_buffer.bitmap_info.bmiHeader);
+            render_buffer.bitmap_info.bmiHeader.biWidth = render_buffer.width;
+            render_buffer.bitmap_info.bmiHeader.biHeight = render_buffer.height;
+            render_buffer.bitmap_info.bmiHeader.biPlanes = 1;
+            render_buffer.bitmap_info.bmiHeader.biBitCount = 32;
+            render_buffer.bitmap_info.bmiHeader.biCompression = BI_RGB;
+        } break;
+
         default:{
             result = DefWindowProcA(window, message, w_param, l_param);
         }
