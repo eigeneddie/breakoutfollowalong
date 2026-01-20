@@ -47,8 +47,7 @@ WNDPROC Wndproc;
 // This is a function pointer I give to Windows for IT to use it when something happen to a window in Win32.
 // This is callback that is given to window_class.
 internal LRESULT  
-window_callback(HWND window, UINT message, WPARAM w_param, 
-    LPARAM l_param)
+window_callback(HWND window, UINT message, WPARAM w_param, LPARAM l_param)
 {
     LRESULT result = 0;
     switch(message){
@@ -57,9 +56,47 @@ window_callback(HWND window, UINT message, WPARAM w_param,
             running = false;
         } break;
 
+        case WM_SIZE:{
+            // 1. Get width and height
+            // MSDN GetWindowRect https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getwindowrect
+            RECT rect;
+            GetWindowRect(window, &rect);
+            render_buffer.width = rect.right - rect.left;
+            render_buffer.height = rect.bottom - rect.top;
+
+            // 2. Allocate the buffer
+            if(render_buffer.pixels){
+                //free
+                // MSDN virtualfree https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualfree
+                VirtualFree(render_buffer.pixels, 0, MEM_RELEASE);
+  
+            }
+
+            // MSDN VirtualAlloc https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualalloc
+            render_buffer.pixels = VirtualAlloc(0, sizeof(u32)*render_buffer.width*render_buffer.height, 
+                                    MEM_COMMIT|MEM_RESERVE, PAGE_READWRITE);
+
+            // 3. Fill bitmap info
+
+            // MSDN bitmapinfoheader https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapinfoheader
+            typedef struct tagBITMAPINFOHEADER {
+            DWORD biSize;
+            LONG  biWidth;
+            LONG  biHeight;
+            WORD  biPlanes;
+            WORD  biBitCount;
+            DWORD biCompression;
+            DWORD biSizeImage;
+            LONG  biXPelsPerMeter;
+            LONG  biYPelsPerMeter;
+            DWORD biClrUsed;
+            DWORD biClrImportant;
+            } BITMAPINFOHEADER, *LPBITMAPINFOHEADER, *PBITMAPINFOHEADER;
+        }
         default:{
             result = DefWindowProcA(window, message, w_param, l_param);
         }
+
     }
     return result;
 
