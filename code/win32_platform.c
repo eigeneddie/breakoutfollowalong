@@ -32,11 +32,11 @@ void main(){
 #include "utils.c"
 #include <windows.h>
 
-struct {
+typedef struct {
     int width, height;
     u32 *pixels;
     BITMAPINFO bitmap_info;
-} typedef Render_Buffer;
+} Render_Buffer;
 
 global_variable Render_Buffer render_buffer;
 
@@ -107,7 +107,7 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
 
     RegisterClassA(&window_class);
 
-    HWND window = CreateWindowExA(0, window_class.lpszClassName, "Breakout",
+    HWND window = CreateWindowExA(0, window_class.lpszClassName, "Random Game",
         WS_VISIBLE|WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 1280, 720, 0, 0, 0, 0);
     HDC hdc = GetDC(window);
 
