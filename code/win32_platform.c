@@ -30,15 +30,21 @@ void main(){
 */
 
 #include "utils.c"
+
 #include <windows.h>
 
 typedef struct {
+    // Platform non-specific part
     int width, height;
     u32 *pixels;
+
+    // Platform specific part
     BITMAPINFO bitmap_info;
 } Render_Buffer;
 
 global_variable Render_Buffer render_buffer;
+
+#include "software_rendering.c"
 
 WNDPROC Wndproc;
 
@@ -107,7 +113,7 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
 
     RegisterClassA(&window_class);
 
-    HWND window = CreateWindowExA(0, window_class.lpszClassName, "Random Game",
+    HWND window = CreateWindowExA(0, window_class.lpszClassName, "Random window!",
         WS_VISIBLE|WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 1280, 720, 0, 0, 0, 0);
     HDC hdc = GetDC(window);
 
@@ -122,7 +128,7 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
         }
 
         // PART 2: SIMULATION
-
+        clear_screen(0xffff00);
 
         // PART 3: RENDER
 
