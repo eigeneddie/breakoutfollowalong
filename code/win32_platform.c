@@ -30,7 +30,7 @@ void main(){
 */
 
 #include "utils.c"
-
+#include "math.c"
 #include <windows.h>
 
 typedef struct {
@@ -40,6 +40,7 @@ typedef struct {
 
     // Platform specific part
     BITMAPINFO bitmap_info;
+
 } Render_Buffer;
 
 global_variable Render_Buffer render_buffer;
@@ -128,7 +129,8 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
         }
 
         // PART 2: SIMULATION
-        clear_screen(0xffff00);
+        clear_screen(0x551100);
+        draw_rect_in_pixels(50, 50, 500, 500, 0xffff00); // x0, y0, x1, y1, color
 
         // PART 3: RENDER
 
