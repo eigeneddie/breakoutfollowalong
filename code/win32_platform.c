@@ -114,7 +114,7 @@ window_callback(HWND window, UINT message, WPARAM w_param, LPARAM l_param)
 // WINDOWS ENTRY POINT (the void main() for windows)
 int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
 {
-    // Define the window_class
+    // STEP 1: Define the window_class
     WNDCLASSA window_class = {0}; 
     window_class.style = CS_HREDRAW|CS_VREDRAW;
     window_class.lpfnWndProc = window_callback;
@@ -122,16 +122,20 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
 
     RegisterClassA(&window_class);
 
+    // STEP 2: Create window and initialize values
     HWND window = CreateWindowExA(0, window_class.lpszClassName, "Random window!",
         WS_VISIBLE|WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 1280, 720, 0, 0, 0, 0);
     HDC hdc = GetDC(window);
 
     Input input = {0};
 
+    // STEP 3: Super loop while the program runs
     while (running){
-        // PART 1: INPUT
-        MSG message;
 
+        // PART 1: INPUT
+        for (int i = 0; i < BUTTON_COUNT; i++) input.buttons[i].changed = false;
+
+        MSG message;
         // MSDN PeekMessageA https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-peekmessagea
         while(PeekMessageA(&message, window, 0, 0, PM_REMOVE)){ 
             // This is the Windows message pump.
@@ -149,12 +153,17 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
                     u32 vk_code = (u32)message.wParam;
                     b32 was_down = ((message.lParam & (1<<30)) != 0); // bit 30 in lParam means previous key state
                     b32 is_down = ((message.lParam & (1<<31)) == 0); // bit 31 in lParam means transition state
-                    
-                    if (vk_code == VK_LEFT){
-                        input.buttons[BUTTON_LEFT].is_down = is_down;
-                        input.buttons[BUTTON_LEFT].changed = true;
-                    }
-                
+
+#define process_button(vk, b) \
+if (vk_code == vk){\
+    input.buttons[b].changed = is_down != input.buttons[b].is_down;\
+    input.buttons[b].is_down = is_down;\
+}
+                process_button(VK_LEFT, BUTTON_LEFT);
+                process_button(VK_RIGHT, BUTTON_RIGHT);
+                process_button(VK_UP, BUTTON_UP);
+                process_button(VK_DOWN, BUTTON_DOWN);
+
                 } break;
 
                 default: {

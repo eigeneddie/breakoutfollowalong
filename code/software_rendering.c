@@ -1,7 +1,4 @@
-//#include "utils.c"
-//#include "win32_platform.c"
-
-internal void 
+internal void
 clear_screen (u32 color){
     u32 *pixel = render_buffer.pixels;
     

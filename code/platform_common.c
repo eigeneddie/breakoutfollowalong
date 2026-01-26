@@ -5,7 +5,6 @@ enum{
     BUTTON_RIGHT,
     BUTTON_UP,
     BUTTON_DOWN,
-
     BUTTON_COUNT,
 };
 
@@ -21,6 +20,10 @@ typedef struct{
 typedef struct {
     int mouse_x;
     int mouse_y;
-
     Button buttons[BUTTON_COUNT];
 } Input;
+
+
+#define pressed(b) (input->buttons[b].is_down && input->buttons[b].changed)
+#define released(b) (!input->buttons[b].is_down && input->buttons[b].changed)
+#define is_down(b) input->buttons[b].is_down 
