@@ -8,13 +8,11 @@ enum{
     BUTTON_COUNT,
 };
 
-
 // Button state
 typedef struct{
     b32 is_down;
     b32 changed;
 } Button;
-
 
 //Mouse input
 typedef struct {
@@ -27,3 +25,9 @@ typedef struct {
 #define pressed(b) (input->buttons[b].is_down && input->buttons[b].changed)
 #define released(b) (!input->buttons[b].is_down && input->buttons[b].changed)
 #define is_down(b) input->buttons[b].is_down 
+
+#define process_button(vk, b) \
+if (vk_code == vk){\
+    input.buttons[b].changed = is_down != input.buttons[b].is_down;\
+    input.buttons[b].is_down = is_down;\
+}

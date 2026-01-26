@@ -25,3 +25,22 @@ draw_rect_in_pixels(int x0, int y0, int x1, int y1, u32 color){
         }
     }
 }
+
+
+internal void
+draw_rect(v2 p, v2 half_size, u32 color){
+    // Convert the units to pixels and call draw_rect_in_pixels
+
+    p.x += (f32)render_buffer.width * .5f;
+    p.y += (f32)render_buffer.height * .5f;
+
+    half_size.x /= (f32)render_buffer.width;
+    half_size.y /= (f32)render_buffer.height;
+
+    int x0 = (int)(p.x - half_size.x);
+    int y0 = (int)(p.y - half_size.y);
+    int x1 = (int)(p.x + half_size.x);
+    int y1 = (int)(p.y + half_size.y);
+
+    draw_rect_in_pixels(x0, y0, x1, y1, color); 
+}

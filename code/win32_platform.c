@@ -123,7 +123,7 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
     RegisterClassA(&window_class);
 
     // STEP 2: Create window and initialize values
-    HWND window = CreateWindowExA(0, window_class.lpszClassName, "Random window!",
+    HWND window = CreateWindowExA(0, window_class.lpszClassName, "Random game!!",
         WS_VISIBLE|WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 1280, 720, 0, 0, 0, 0);
     HDC hdc = GetDC(window);
 
@@ -154,15 +154,10 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
                     b32 was_down = ((message.lParam & (1<<30)) != 0); // bit 30 in lParam means previous key state
                     b32 is_down = ((message.lParam & (1<<31)) == 0); // bit 31 in lParam means transition state
 
-#define process_button(vk, b) \
-if (vk_code == vk){\
-    input.buttons[b].changed = is_down != input.buttons[b].is_down;\
-    input.buttons[b].is_down = is_down;\
-}
-                process_button(VK_LEFT, BUTTON_LEFT);
-                process_button(VK_RIGHT, BUTTON_RIGHT);
-                process_button(VK_UP, BUTTON_UP);
-                process_button(VK_DOWN, BUTTON_DOWN);
+                    process_button(VK_LEFT, BUTTON_LEFT);
+                    process_button(VK_RIGHT, BUTTON_RIGHT);
+                    process_button(VK_UP, BUTTON_UP);
+                    process_button(VK_DOWN, BUTTON_DOWN);
 
                 } break;
 
