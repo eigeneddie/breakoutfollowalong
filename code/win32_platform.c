@@ -1,28 +1,34 @@
-// PERSONAL NOTE:
-// 1. Compiling the code
-//  to build program, run:
-//  call "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvarsall.bat" x64 
-//  on the cmd prompt so you can build the code from using cl command
-//  
-// 2. OG Handmadehero notes
-//  here's external resource indexint handmadehero episodes.
-//  Use to pin down philosophy + core engine architecture patterns
-//
-//  https://yakvi.github.io/handmade-hero-notes/index.md.html?
-//
-// 3. Quick OG episode rundown
-//  Day 001–004 (loop + backbuffer + animation)
-//  Day 010–015 (timing + platform API + memory + debug I/O)
-//  Day 021–023 (DLL hot reload + looped live edit)
-//  Day 088 (push buffer rendering)
-//  Day 112–113 (CPU model + perf counters)
-//  Day 132 (asset streaming starts)
-// 
-// 4. For the windows platform layer code (win32_platform.c)
-//  it will heavily comment the code to indicate which MSDN Doc is used since it's 
-//  highly linked with interacting with windows, which needs specific functions/classes, etc.
+/* PERSONAL NOTE:
+ 1. Compiling the code
+  to build program, run:
+  call "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvarsall.bat" x64 
+  on the cmd prompt so you can build the code from using cl command
+  
+ 2. OG Handmadehero notes
+  here's external resource indexint handmadehero episodes.
+  Use to pin down philosophy + core engine architecture patterns
 
-/*
+  https://yakvi.github.io/handmade-hero-notes/index.md.html?
+
+ 3. Quick OG episode rundown
+  Day 001–004 (loop + backbuffer + animation)
+  Day 010–015 (timing + platform API + memory + debug I/O)
+  Day 021–023 (DLL hot reload + looped live edit)
+  Day 088 (push buffer rendering)
+  Day 112–113 (CPU model + perf counters)
+  Day 132 (asset streaming starts)
+ 
+ 4. For the windows platform layer code (win32_platform.c)
+  it will heavily comment the code to indicate which MSDN Doc is used since it's 
+  highly linked with interacting with windows, which needs specific functions/classes, etc.
+
+
+ 5. The main goal of this c file is 3 fold
+  a. Show the WINDOW
+  b. handle user INPUT
+  c. RENDERING on the window
+*/
+  /*
 // Test code
 void main(){
     printf("hello sailor!\n");
@@ -31,6 +37,8 @@ void main(){
 
 #include "utils.c"
 #include "math.c"
+
+#include "platform_common.c"
 #include <windows.h>
 
 typedef struct {
@@ -46,6 +54,7 @@ typedef struct {
 global_variable Render_Buffer render_buffer;
 
 #include "software_rendering.c"
+#include "game.c"
 
 WNDPROC Wndproc;
 
@@ -97,7 +106,6 @@ window_callback(HWND window, UINT message, WPARAM w_param, LPARAM l_param)
         default:{
             result = DefWindowProcA(window, message, w_param, l_param);
         }
-
     }
     return result;
 
@@ -118,19 +126,46 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
         WS_VISIBLE|WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 1280, 720, 0, 0, 0, 0);
     HDC hdc = GetDC(window);
 
+    Input input = {0};
+
     while (running){
         // PART 1: INPUT
         MSG message;
 
         // MSDN PeekMessageA https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-peekmessagea
         while(PeekMessageA(&message, window, 0, 0, PM_REMOVE)){ 
-            TranslateMessage(&message);
-            DispatchMessage(&message);
+            // This is the Windows message pump.
+            // this is how the app reads input events (keyboard, mouse, etc) from OS and hands it to Windows to handle normally [??]
+            // PeekMessage is a queue of messages (key presses, mouse, resize, close, etc.). it pulls one message at a time.
+            // PM_REMOVE --> remove it from queue when it's read
+            // The while keeps going until the queue is empty
+            //
+
+            switch(message.message){
+                case WM_SYSKEYDOWN:
+                case WM_SYSKEYUP:
+                case WM_KEYDOWN:
+                case WM_KEYUP:{
+                    u32 vk_code = (u32)message.wParam;
+                    b32 was_down = ((message.lParam & (1<<30)) != 0); // bit 30 in lParam means previous key state
+                    b32 is_down = ((message.lParam & (1<<31)) == 0); // bit 31 in lParam means transition state
+                    
+                    if (vk_code == VK_LEFT){
+                        input.buttons[BUTTON_LEFT].is_down = is_down;
+                        input.buttons[BUTTON_LEFT].changed = true;
+                    }
+                
+                } break;
+
+                default: {
+                    TranslateMessage(&message);
+                    DispatchMessage(&message);
+                }
+            }
         }
 
         // PART 2: SIMULATION
-        clear_screen(0x551100);
-        draw_rect_in_pixels(50, 50, 500, 500, 0xffff00); // x0, y0, x1, y1, color
+        simulate_game(&input);
 
         // PART 3: RENDER
 

@@ -22,6 +22,7 @@ draw_rect_in_pixels(int x0, int y0, int x1, int y1, u32 color){
     
     for (int y = y0; y < y1; y++){
         u32 *pixel = render_buffer.pixels + x0 + render_buffer.width*y;
+        // Note that the pixels on screen is represented as 1D array
         for (int x = x0; x < x1; x++){
             *pixel = color; pixel++;
         }
