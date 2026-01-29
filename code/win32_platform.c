@@ -93,7 +93,6 @@ window_callback(HWND window, UINT message, WPARAM w_param, LPARAM l_param)
                                     MEM_COMMIT|MEM_RESERVE, PAGE_READWRITE);
 
             // 3. Fill bitmap info
-
             // MSDN bitmapinfoheader https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapinfoheader
             render_buffer.bitmap_info.bmiHeader.biSize = sizeof(render_buffer.bitmap_info.bmiHeader);
             render_buffer.bitmap_info.bmiHeader.biWidth = render_buffer.width;
