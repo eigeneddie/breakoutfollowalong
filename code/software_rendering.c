@@ -31,6 +31,18 @@ internal void
 draw_rect(v2 p, v2 half_size, u32 color){
     // Convert the units to pixels and call draw_rect_in_pixels
 
+    f32 aspect_multiplier = (f32) render_buffer.width;
+    if ((f32)render_buffer.width / (f32)render_buffer.height < WINDOW_ASPECT_RATIO){
+        aspect_multiplier = (f32)render_buffer.width * WINDOW_ASPECT_RATIO;
+    }
+
+    f32 scale = 0.001f;
+    half_size.x *= (f32)render_buffer.width * scale;
+    half_size.y *= (f32)render_buffer.height * scale;
+
+    p.x *= aspect_multiplier * scale;
+    p.y *= aspect_multiplier * scale;
+     
     p.x += (f32)render_buffer.width * .5f;
     p.y += (f32)render_buffer.height * .5f;
 

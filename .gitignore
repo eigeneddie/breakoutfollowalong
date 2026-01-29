@@ -3,3 +3,4 @@ build/vc140.pdb
 build/win32_platform.exe
 build/win32_platform.pdb    
 .vscode/
+build/.vs

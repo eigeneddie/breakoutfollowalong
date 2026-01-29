@@ -23,4 +23,6 @@ typedef int b32;
 #define global_variable static
 #define internal static
 
+#define WINDOW_ASPECT_RATIO 1.77f
+
 global_variable b32 running = true;
