@@ -34,8 +34,8 @@ draw_rect(v2 p, v2 half_size, u32 color){
     p.x += (f32)render_buffer.width * .5f;
     p.y += (f32)render_buffer.height * .5f;
 
-    half_size.x /= (f32)render_buffer.width;
-    half_size.y /= (f32)render_buffer.height;
+    //half_size.x /= (f32)render_buffer.width;
+    //half_size.y /= (f32)render_buffer.height;
 
     int x0 = (int)(p.x - half_size.x);
     int y0 = (int)(p.y - half_size.y);
