@@ -101,3 +101,8 @@ Obviously, watching +600 episodes of handmadehero is inhumane. Instead, I asked 
 - audio, sound, samples, wave, latency
 - file I/O, asset loading, bitmap loading
 - DLL reload, hot reload, live code
+
+
+## Personal notes
+1. Render_Buffer struct - 
+    

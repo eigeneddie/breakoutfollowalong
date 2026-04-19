@@ -36,7 +36,7 @@ draw_rect(v2 p, v2 half_size, u32 color){
         aspect_multiplier = (f32)render_buffer.width / WINDOW_ASPECT_RATIO;
     }
 
-    f32 scale = 0.001f;
+    f32 scale = 0.01f;
     half_size.x *= (f32)render_buffer.width * scale;
     half_size.y *= (f32)render_buffer.height * scale;
 
