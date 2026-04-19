@@ -168,7 +168,8 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
         }
 
         // PART 2: SIMULATION
-        simulate_game(&input);
+        f32 dt = 0.01666f;
+        simulate_game(&input, dt);
 
         // PART 3: RENDER
 
