@@ -16,7 +16,11 @@ call "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\v
 Unlike mainstream software development, we are compiling everything from scratch every time. No build tools like CMake or Ninja. 
 
 # Important Artifacts to implement in Random Game development
-Obviously, watching +600 episodes of handmadehero is inhumane. Instead, I asked chatGPT what would be the 80/20 principles of computer systems that handmadehero teaches so we can skim his insights. Below is the list of "artifacts" critical for getting down first-principle of computer systems 
+Obviously, watching +600 episodes of handmadehero is inhumane. Instead, I asked chatGPT what would be the 80/20 principles of computer systems that handmadehero teaches so we can skim his insights. 
+
+I realize that the most important point for this project is the **platform separation** aspect - you want to separate platform-specific functions with the game logic. This way, you can port the game to a different platform (i.e. linux or macOS) while keeping the game logic separate. You are also working with the hardware aspect of the computer. Instead of treating the computer like an infinite computing resource in high-level/interpreted languages, you take into account hardware limitations. The most first-principled limitation is the speed of light - as a computer completes a single clock cycle, light needs to travel from CPU to memory (RAM) back to CPU. 
+
+Below is the list of "artifacts" critical for getting down first-principle of computer systems 
 
 ## Tier 0 artifacts (core 80/20)
 
