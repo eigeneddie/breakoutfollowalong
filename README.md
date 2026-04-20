@@ -20,23 +20,23 @@ Obviously, watching +600 episodes of handmadehero is inhumane. Instead, I asked 
 
 ## Tier 0 artifacts (core 80/20)
 
-1. Build + run pipeline
+1. Build + run pipeline ✅
     - one-command debug build, one-command release build
     - learn: compiler flags, linking, debug symbols, warnings-as-errors
 
-2. Platform ↔ Game boundary
+2. Platform ↔ Game boundary ✅
     - `platform` calls `GameUpdateAndRender()` (and later `GameGetSoundSamples()`)
     - game code is “pure” and only touches memory/input buffers passed in
 
-3. Offscreen buffer (software framebuffer)
+3. Offscreen buffer (software framebuffer) ✅
     - backbuffer struct: pixels, width, height, pitch
     - render by writing pixels + blitting to window
 
-4. Game loop timing
+4. Game loop timing ✅
     - frame timing + stable dt
     - optionally fixed timestep + accumulator
 
-5. Input system with transitions
+5. Input system with transitions ✅
     - is_down + “half transitions”/changed
     - input is a snapshot per frame, not raw events sprinkled everywhere
 
