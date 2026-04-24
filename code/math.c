@@ -15,3 +15,15 @@ typedef struct{
         f32 e[2];
     };
 } v2;
+
+
+// Vector 2 (int)
+typedef struct{
+    union{
+        struct{
+            int x;
+            int y;   
+        };
+        int e[2];
+    };
+} v2i;

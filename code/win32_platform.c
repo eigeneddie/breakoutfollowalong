@@ -193,6 +193,14 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
             }
         }
 
+        POINT mouse_pointer;
+        GetCursorPos(&mouse_pointer); //https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getcursorpos
+        ScreenToClient(window, &mouse_pointer);  //https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-screentoclient
+
+        input.mouse.x = mouse_pointer.x;
+        input.mouse.y = mouse_pointer.y;
+
+
         // PART 2: SIMULATION
         simulate_game(&input, last_dt);
 
