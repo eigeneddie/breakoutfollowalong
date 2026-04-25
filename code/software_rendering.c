@@ -32,7 +32,7 @@ inline f32
 calculate_aspect_multiplier(){
     // use same multiplier for both axes so position isn't stretched
     // = width normally, but clamped if window is taller than aspect ratio
-    f32 aspect_multiplier = (f32) render_buffer.height;
+    f32 aspect_multiplier = (f32) render_buffer.width;
     if ((f32)render_buffer.width / (f32)render_buffer.height < WINDOW_ASPECT_RATIO){
         aspect_multiplier = (f32)render_buffer.width / WINDOW_ASPECT_RATIO;
     }

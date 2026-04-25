@@ -158,8 +158,10 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
     while (running){
 
         // PART 1: INPUT
+        // a. 
         for (int i = 0; i < BUTTON_COUNT; i++) input.buttons[i].changed = false;
 
+        // b. message
         MSG message;
         // MSDN PeekMessageA https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-peekmessagea
         while(PeekMessageA(&message, window, 0, 0, PM_REMOVE)){ 
