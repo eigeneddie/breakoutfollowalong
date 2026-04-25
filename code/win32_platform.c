@@ -198,7 +198,7 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
         ScreenToClient(window, &mouse_pointer);  //https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-screentoclient
 
         input.mouse.x = mouse_pointer.x;
-        input.mouse.y = mouse_pointer.y;
+        input.mouse.y = render_buffer.height - mouse_pointer.y;
 
 
         // PART 2: SIMULATION
