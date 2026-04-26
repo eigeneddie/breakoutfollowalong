@@ -60,5 +60,5 @@ simulate_game(Input *input, f32 dt){
     clear_screen(0x551100);
     draw_rect(ball_p, (v2){0.5, 0.5}, 0x00ffff);
     draw_rect((v2){player_p.x, -28}, (v2){10, 2}, 0x00ff00);
-
+    
 }
