@@ -63,10 +63,10 @@ draw_rect(v2 p, v2 half_size, u32 color){
 
     // pixel_size = game_units * screen_dimension * scale
     
-    half_size.x *= (f32)render_buffer.width * scale;
-    half_size.y *= (f32)render_buffer.height * scale;
-
     f32 aspect_multiplier = calculate_aspect_multiplier();
+
+    half_size.x *= (f32) aspect_multiplier * scale;
+    half_size.y *= (f32) aspect_multiplier * scale;
 
     // pixel_pos = game_pos * aspect_multiplier * scale
     p.x *= aspect_multiplier * scale;
@@ -75,10 +75,6 @@ draw_rect(v2 p, v2 half_size, u32 color){
     // shift origin from screen center to top-left: pixel_pos += screen_dimension * 0.5
     p.x += (f32)render_buffer.width * .5f;
     p.y += (f32)render_buffer.height * .5f;
-
-    //f32 scale = 0.0001f;
-    //half_size.x /= (f32)render_buffer.width * scale;
-    //half_size.y /= (f32)render_buffer.height * scale;
 
     // corners: (x0,y0) = p - half_size,  (x1,y1) = p + half_size
     int x0 = (int)(p.x - half_size.x);

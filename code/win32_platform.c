@@ -55,6 +55,7 @@ global_variable Render_Buffer render_buffer;
 
 #include "software_rendering.c"
 #include "game.c"
+#include "collision.c"
 
 WNDPROC Wndproc;
 

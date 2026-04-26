@@ -268,3 +268,23 @@ Every frame:
 | Virtual memory | `VirtualAlloc/VirtualFree` | Direct OS allocation — no heap overhead |
 | Message pump | `PeekMessageA` loop | Required by Windows to process all OS events |
 | Callback pattern | `window_callback` | Windows calls your function when events happen |
+
+
+## NOTES
+
+[04/25]
+--------------------------------------------------
+### CSAPP Reference
+
+| Chapter | Topic | Where it shows up |
+|---|---|---|
+| 2 — Representing and Manipulating Information | `union` (same bits, different types) | `v2`, `v2i` in math.c |
+| 2 — Representing and Manipulating Information | Integer vs float (`f32`, `u32`) | everywhere |
+| 2 — Representing and Manipulating Information | Bit manipulation | `lParam` bit 30/31 in input decoding |
+| 3 — Machine-Level Representation | What `inline` compiles to | `calculate_aspect_multiplier` |
+| 3 — Machine-Level Representation | Struct/union memory layout | `v2`, `Render_Buffer` |
+| 6 — The Memory Hierarchy | Cache-friendly sequential access | `clear_screen`, `draw_rect_in_pixels` |
+| 6 — The Memory Hierarchy | `VirtualAlloc` vs heap | `WM_SIZE` handler |
+| 9 — Virtual Memory | Direct OS memory management | `VirtualAlloc` / `VirtualFree` |
+
+> Start with **Chapter 6** — understanding why the 1D pixel buffer is a deliberate performance choice will make the rendering decisions click.
