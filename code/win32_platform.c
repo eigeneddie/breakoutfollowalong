@@ -112,7 +112,11 @@ window_callback(HWND window, UINT message, WPARAM w_param, LPARAM l_param)
 }
 
 // WINDOWS ENTRY POINT (the void main() for windows)
-int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
+int WinMain(
+    HINSTANCE hInst,     // [boilerplate] handle to this running instance
+    HINSTANCE hInstPrev, // [boilerplate] always NULL in modern Windows
+    PSTR cmdline,        // [boilerplate] command line arguments as a string
+    int cmdshow)         // [boilerplate] how the window should be shown (minimized, normal, etc.)
 {
     // =====================================================================
     // MOST IMPORTANT POINT 1: REGISTER THE WINDOW CLASS
@@ -135,8 +139,15 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
     // Hold onto hdc — it's used every frame in StretchDIBits.
     // This runs ONCE at startup.
     // =====================================================================
-    HWND window = CreateWindowExA(0, window_class.lpszClassName, "Random game!!",
-        WS_VISIBLE|WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 1280, 720, 0, 0, 0, 0);
+    HWND window = CreateWindowExA(
+        0,                           // [boilerplate] extended window style, none needed
+        window_class.lpszClassName,  // [boilerplate] window class to use
+        "Random game!!",             // [important]   window title bar text
+        WS_VISIBLE|WS_OVERLAPPEDWINDOW, // [boilerplate] standard resizable window, visible on creation
+        CW_USEDEFAULT, CW_USEDEFAULT,   // [boilerplate] let Windows pick the x,y position
+        1280, 720,                   // [important]   initial window width and height
+        0, 0, 0, 0);                 // [boilerplate] parent window, menu, instance, extra params
+    
     HDC hdc = GetDC(window);  // <-- THE IMPORTANT LINE
 
     Input input = {0};
@@ -165,7 +176,12 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
         // b. message
         MSG message;
         // MSDN PeekMessageA https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-peekmessagea
-        while(PeekMessageA(&message, window, 0, 0, PM_REMOVE)){ 
+        while(PeekMessageA(
+            &message,  // [important]   output: the event pulled from the queue
+            window,    // [boilerplate] only get messages for this window
+            0, 0,      // [boilerplate] message filter min/max, 0 = get all messages
+            PM_REMOVE  // [boilerplate] remove the message from the queue after reading
+        )){
             // This is the Windows message pump.
             // this is how the app reads input events (keyboard, mouse, etc) from OS and hands it to Windows to handle normally [??]
             // PeekMessage is a queue of messages (key presses, mouse, resize, close, etc.). it pulls one message at a time.
@@ -214,8 +230,20 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
         // use the buffer (draw) -> StretchDIBits   
 
         // MSDN StretchDIBits https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-stretchdibits
-        StretchDIBits(hdc, 0, 0, render_buffer.width, render_buffer.height, 
-            0, 0, render_buffer.width, render_buffer.height, render_buffer.pixels, &render_buffer.bitmap_info, DIB_RGB_COLORS, SRCCOPY);
+        // copies render_buffer.pixels (CPU memory) to the actual screen
+        StretchDIBits(
+            hdc,                        // [boilerplate] handle to window's drawable surface
+            0, 0,                       // [boilerplate] destination top-left on screen
+            render_buffer.width,        // [important]   destination width
+            render_buffer.height,       // [important]   destination height
+            0, 0,                       // [boilerplate] source top-left in pixel buffer
+            render_buffer.width,        // [important]   source width
+            render_buffer.height,       // [important]   source height
+            render_buffer.pixels,       // [important]   the actual pixel data to blit
+            &render_buffer.bitmap_info, // [boilerplate] tells Windows the pixel format (32-bit RGB)
+            DIB_RGB_COLORS,             // [boilerplate] color table is RGB values
+            SRCCOPY                     // [boilerplate] just copy, no blending
+        );
         
 
         // NOTE:
