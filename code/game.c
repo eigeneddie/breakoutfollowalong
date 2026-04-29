@@ -37,7 +37,7 @@ simulate_game(Input *input, f32 dt){
         ball_p.y = 10;
         ball_half_size = (v2){.75, .75};
 
-        player_p.y = -28;
+        player_p.y = -10;
         player_half_size = (v2){10, 2};
     }
 
@@ -50,7 +50,8 @@ simulate_game(Input *input, f32 dt){
     ball_p = add_v2(ball_p, mul_v2(ball_dp, dt));
 
     // STEP 4: collision detection between ball and player
-    if (aabb_vs_aabb(player_p, player_half_size, ball_p, ball_half_size)){
+    if (ball_dp.y < 0 &&
+        aabb_vs_aabb(player_p, player_half_size, ball_p, ball_half_size)){
         // ball reflection or something
         ball_dp.y *= -1; // basically change direction
         ball_dp.x += player_dp.x;
@@ -58,7 +59,7 @@ simulate_game(Input *input, f32 dt){
 
     // STEP 5: clear screen and draw
     clear_screen(0x551100);
-    draw_rect(ball_p, (v2){0.5, 0.5}, 0x00ffff);
-    draw_rect((v2){player_p.x, -28}, (v2){10, 2}, 0x00ff00);
+    draw_rect(ball_p, ball_half_size, 0x00ffff);
+    draw_rect(player_p, player_half_size, 0x00ff00);
     
 }
